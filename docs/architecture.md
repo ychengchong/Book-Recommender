@@ -11,6 +11,12 @@ selection/formatting code. `dashboard.py` owns file access, provider initializat
 index state and the UI. The root script delegates to the package. Imports do not
 read data, build indexes or launch a server.
 
+`analysis.py` contains the notebooks' category prediction and emotion aggregation
+helpers. Emotion scores are matched by label name, not output position. The
+notebooks use CPU by default and keep model runs separate from data inspection.
+Saved notebook outputs are cleared. The vector notebook exports one whitespace-
+normalized description per line and reuses the app's recommendation selection.
+
 The authoritative CSV field set is `REQUIRED_COLUMNS` in the recommendations
 module. ISBNs are unique 13-digit ASCII strings. Title, authors, description and
 category are nonempty; five consumed emotion scores are finite values in [0, 1].

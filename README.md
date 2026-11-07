@@ -46,8 +46,11 @@ Run notebooks from the repository root in this order:
    Later cells build an OpenAI index and make paid requests; they are not required
    to export this file.
 
-The classification notebooks currently select Apple's `mps` device. On Windows,
-change it to `device=-1` for CPU, or an appropriate CUDA device if configured.
+The classification notebooks use `device=-1` for CPU, which works on Windows.
+Change it only if you have a configured GPU. Emotion scores now match model output
+by label name, fixing a label-order bug in the original notebook. Regenerate
+`books_with_emotions.csv` before using this version; old emotion results are not
+comparable. Long sentence inputs are truncated to fit the emotion model.
 Downloads, model runs and paid calls are manual actions. Snapshot IDs and model
 revisions have not been recorded by the original notebooks, so their historical
 outputs are not reproducible evidence. Generated CSV/TXT files are ignored.

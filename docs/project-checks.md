@@ -4,6 +4,9 @@ Run the offline commands in the README after editing selection, formatting or
 startup validation. Synthetic fixtures cover semantic order, duplicate/unknown
 hits, category filtering, tone ranking before truncation, malformed index IDs,
 CSV validation, missing images and missing data. They do not measure model quality.
+Notebook helper tests also check that emotion labels stay matched to their scores
+when model output order changes and category selection uses the highest score.
+Check notebook cell syntax without running downloads, models or paid cells.
 
 Before a real local smoke test, prepare aligned catalogue and document files and
 configure provider access. Check a query with no filter, each category/tone,

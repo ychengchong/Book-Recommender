@@ -1,4 +1,4 @@
-﻿"""Compatibility entry point; install the local package before running."""
+"""Compatibility entry point; install the local package before running."""
 
 from book_recommender.dashboard import main
 
