@@ -1,0 +1,42 @@
+# Secrets and local credentials; example variable names may be committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+
+# Local environments and generated caches.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Large/private inputs, generated artifacts and operational state.
+# Adapt these paths if using DVC or another versioning system; retain its metadata.
+data/raw/
+data/processed/
+artifacts/
+runs/
+state/
+logs/
+tmp/
+
+# Keep code, configs, safe fixtures, data manifests and selected reports visible.
+.DS_Store
+Thumbs.db
+
+# Editable-install metadata.
+*.egg-info/
+build/
+dist/
+
+# Notebook-generated dataset files (keep research source notebooks).
+/books_cleaned.csv
+/books_with_categories.csv
+/books_with_emotions.csv
+/tagged_description.txt
