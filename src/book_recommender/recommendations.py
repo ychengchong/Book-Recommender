@@ -40,9 +40,10 @@ def load_catalogue(path):
             if isbn in catalogue:
                 raise ValueError(f"Duplicate ISBN-13 at catalogue line {line}")
 
-            for field in ("title", "authors", "description", "simple_categories"):
+            for field in ("title", "description", "simple_categories"):
                 if not (row[field] or "").strip():
                     raise ValueError(f"Missing {field} at catalogue line {line}")
+            row["authors"] = (row["authors"] or "").strip() or "Unknown author"
             # Emotion scores should be numbers between 0 and 1.
             for field in TONE_COLUMNS.values():
                 try:
@@ -108,9 +109,11 @@ def gallery_items(recommendations):
     """Create a cover and caption for each recommended book."""
     results = []
     for book in recommendations:
-        authors = book["authors"].split(";")
-        authors = [author.strip() for author in authors]
-        if len(authors) == 1:
+        authors = (book.get("authors") or "").split(";")
+        authors = [author.strip() for author in authors if author.strip()]
+        if not authors:
+            author_text = "Unknown author"
+        elif len(authors) == 1:
             author_text = authors[0]
         elif len(authors) == 2:
             author_text = " and ".join(authors)

@@ -18,8 +18,9 @@ Saved notebook outputs are cleared. The vector notebook exports one whitespace-
 normalized description per line and reuses the app's recommendation selection.
 
 The authoritative CSV field set is `REQUIRED_COLUMNS` in the recommendations
-module. ISBNs are unique 13-digit ASCII strings. Title, authors, description and
-category are nonempty; five consumed emotion scores are finite values in [0, 1].
+module. ISBNs are unique 13-digit ASCII strings. Title, description and category
+are nonempty. Missing authors display as "Unknown author"; five consumed emotion
+scores are finite values in [0, 1].
 Extra research columns are permitted. Missing thumbnails use a bundled SVG cover
 placeholder. Authors are separated by semicolons. Descriptions are truncated
 to 30 words for captions.

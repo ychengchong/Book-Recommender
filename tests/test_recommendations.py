@@ -76,6 +76,27 @@ class RecommendationsTests(unittest.TestCase):
         self.assertTrue(Path(image).is_file())
         self.assertEqual(caption, "Example by A and B: A short story.")
 
+    def test_missing_authors_can_be_loaded_and_displayed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "books.csv"
+            for authors in (None, "", "   ", "; ;"):
+                with self.subTest(authors=authors):
+                    row = book("9780000000001")
+                    row["authors"] = authors
+                    with path.open("w", encoding="utf-8", newline="") as handle:
+                        writer = csv.DictWriter(
+                            handle, fieldnames=sorted(REQUIRED_COLUMNS)
+                        )
+                        writer.writeheader()
+                        writer.writerow(row)
+
+                    catalogue = load_catalogue(path)
+                    self.assertEqual(len(catalogue), 1)
+                    _, caption = gallery_items(list(catalogue.values()))[0]
+                    self.assertEqual(
+                        caption, "Example by Unknown author: A short story."
+                    )
+
     def test_csv_validation(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "books.csv"
@@ -94,6 +115,9 @@ class RecommendationsTests(unittest.TestCase):
                 load_catalogue(path)
             write([{**rows[0], "joy": "nan"}])
             with self.assertRaisesRegex(ValueError, "Invalid joy"):
+                load_catalogue(path)
+            write([{**rows[0], "title": ""}])
+            with self.assertRaisesRegex(ValueError, "Missing title"):
                 load_catalogue(path)
 
     def test_missing_data_fails_before_external_imports(self):
