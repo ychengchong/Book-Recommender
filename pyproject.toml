@@ -30,6 +30,9 @@ research = [
     "langchain-text-splitters==0.3.3",
 ]
 
+[dependency-groups]
+dev = ["ipykernel==6.29.5"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

@@ -5,29 +5,42 @@ and optionally ranks the retrieved candidates by emotional tone.
 
 ## Setup (PowerShell)
 
-Use Python 3.11 and uv. The original dependency versions are retained during
-cleanup; this is a local research application, not a reviewed public deployment.
+Run these commands in PowerShell. Python must already be installed and available
+as `python`. uv creates `.venv`, provides Python 3.11 if needed, and installs the
+app and notebook dependencies. You do not need to create or activate the environment
+manually.
 
 ```powershell
+cd "C:\Python Projects\Book-Recommender"
+
+# Install uv (only needed once).
 python -m pip install uv
-uv sync --locked --python 3.11
-Copy-Item .env.example .env
+
+# Create the environment and install the app + notebook packages.
+python -m uv sync --locked --extra research --python 3.11
+
+# Create the local settings file without replacing an existing one.
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
 Set `OPENAI_API_KEY` in `.env`. Do not commit that file. `pyproject.toml` defines
 the app dependencies and optional notebook packages; `uv.lock` pins their resolved
 versions. These are the only dependency files.
 
+The default development dependencies include `ipykernel`. In VS Code, select
+`.venv\Scripts\python.exe` as the notebook kernel. Restart the notebook kernel
+after syncing if VS Code still prompts to install it. You can then run notebook
+cells in VS Code. To use Jupyter in your browser instead:
+
+```powershell
+python -m uv run --locked --extra research jupyter lab
+```
+
 ## Data preparation
 
 The repository does not contain the catalogue or generated data. The existing
-notebooks remain at the root so their relative paths continue to work. Install
-the optional notebook packages when you need them:
-
-```powershell
-uv sync --locked --extra research --python 3.11
-uv run --locked --extra research jupyter lab
-```
+notebooks remain at the root so their relative paths continue to work. The setup
+command above includes their packages through the `research` option.
 
 The research option is included in the same lockfile, but has not been installed
 or used to rerun models during cleanup. Transformers is
@@ -60,9 +73,9 @@ outputs are not reproducible evidence. Generated CSV/TXT files are ignored.
 Only after preparing data and configuring the key:
 
 ```powershell
-uv run --locked python gradio-dashboard.py
+python -m uv run --locked --extra research python gradio-dashboard.py
 # Alternatively, keep the two input files in another directory:
-uv run --locked python -m book_recommender.dashboard --data-dir "C:\path\to\data"
+python -m uv run --locked --extra research python -m book_recommender.dashboard --data-dir "C:\path\to\data"
 ```
 
 Startup sends the tagged book descriptions to OpenAI and rebuilds an in-memory
@@ -93,7 +106,7 @@ Edit the app dependencies or `research` option in `pyproject.toml`, then regener
 the single lockfile:
 
 ```powershell
-uv lock --python 3.11
+python -m uv lock --python 3.11
 ```
 
 The resolution cutoff in `pyproject.toml` preserves the dependency era of the original December 2024
